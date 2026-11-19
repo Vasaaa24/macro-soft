@@ -206,6 +206,13 @@ export const siteConfig = {
       "https://www.openstreetmap.org/export/embed.html?bbox=21.2402%2C48.7038%2C21.2522%2C48.7088&layer=mapnik&marker=48.70629%2C21.2462",
   },
 
+  /** Texty náhľadového obrázka pri zdieľaní odkazu (Open Graph, /og.png). */
+  og: {
+    title: "Medzinárodný dodávateľ elektrotechnológií",
+    subtitle: "Komponenty z Európy · Logistika CMR · Colné služby",
+    location: "Košice · Slovensko",
+  },
+
   footer: {
     tagline: "Medzinárodný dodávateľ elektrotechnológií",
     rights: "Všetky práva vyhradené.",

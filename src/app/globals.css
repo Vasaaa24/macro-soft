@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
+/* Paleta odvodená z loga macro SOFT */
+@theme {
+  /* Modrá z loga – akcenty, ikony, linky, focus (na bielej 3,9:1 – nie na text) */
+  --color-brand: #2f80ed;
+  /* Tlačidlá s bielym textom a text na svetlom pozadí (5,7:1 na bielej) */
+  --color-brand-strong: #1c64c4;
+  --color-brand-hover: #1a5db8;
+  /* Text akcentu na tmavom pozadí (7,4:1 na #141414) */
+  --color-brand-light: #6aa6f5;
+  /* Podklad ikon na svetlom pozadí */
+  --color-brand-soft: #e8f1fd;
+  --color-ink: #141414;
+  --color-ink-2: #1c1c1c;
+  --color-graphite: #3a3a3a;
+  --color-muted: #5c5c5c;
+  /* Okraje kariet a oddeľovače – dostatočne viditeľné na bielej aj na #f6f6f4 */
+  --color-line: #d4d4ce;
+  --color-paper: #ffffff;
+  --color-surface: #f6f6f4;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * Karty – vyvýšenie tieňom namiesto výrazného okraja.
+ * Obyčajné CSS premenné (nie @theme), aby boli vždy k dispozícii aj pre inline štýly (SpotlightCard).
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --card-border: rgba(20, 20, 20, 0.06);
+  --card-shadow:
+    0 1px 2px rgba(20, 20, 20, 0.05), 0 4px 10px -2px rgba(20, 20, 20, 0.06),
+    0 18px 36px -16px rgba(20, 20, 20, 0.18);
+  --card-shadow-hover:
+    0 1px 2px rgba(20, 20, 20, 0.06), 0 8px 16px -4px rgba(20, 20, 20, 0.08),
+    0 28px 52px -20px rgba(20, 20, 20, 0.28);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Nadpisy v Space Grotesk – rovnaké písmo ako logo */
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-strong);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .on-light :focus-visible {
+    outline-color: var(--color-brand-strong);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Plynulý scroll bez JS len vtedy, keď používateľ nechce obmedziť pohyb (Lenis má vlastný) */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.lenis) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Prvky odhaľované pri scrolle – skryté len ak beží JS a animácie sú povolené */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

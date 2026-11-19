@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# macro SOFT s.r.o. – web-vizitka
 
-## Getting Started
+Jednostránkový prezentační web firmy **macro SOFT s.r.o.** ([www.macro-soft.eu](https://www.macro-soft.eu)) ve slovenštině.
+Nemá backend, formulář ani odesílání e-mailů. Kontakt je jen přes odkazy `tel:` a `mailto:`.
 
-First, run the development server:
+**Stack:** Next.js 16 (App Router, statický export), React 19, TypeScript, Tailwind CSS 4, GSAP (ScrollTrigger, SplitText), Lenis, React Bits (přes shadcn CLI), lucide-react.
+
+## Spuštění
+
+Vyžaduje Node.js 20+.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # vývojový server na http://localhost:3000
+npm run lint     # kontrola ESLint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Export pro hosting
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Výsledek je ve složce **`out/`**. Celý její obsah nahrajte na jakýkoli webhosting (FTP, Apache, Nginx, Netlify, GitHub Pages…). Server ani Node.js nejsou potřeba.
 
-## Learn More
+- Web je nastavený na `trailingSlash: true`, takže stránky se exportují jako `…/index.html`.
+- Doporučení: na hostingu zapněte gzip/brotli kompresi a dlouhou cache pro `/_next/static/*` (soubory mají v názvu hash).
+- Lokální náhled exportu: `npx serve out`
 
-To learn more about Next.js, take a look at the following resources:
+## Kde co upravit
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Co | Kde |
+|---|---|
+| Všechny texty, firemní údaje, kontakty, navigace | `src/config/site.ts` |
+| Partneři / dopravci | `src/data/partners.ts` |
+| Barvy (paleta z loga), písmo | `src/app/globals.css` (`@theme`), `src/app/layout.tsx` |
+| Sekce stránky | `src/components/sections/*` |
+| SEO (metadata, OG), JSON-LD | `src/app/layout.tsx`, `src/lib/jsonld.ts`, `src/app/og.png/route.tsx` |
+| Sitemap / robots | `src/app/sitemap.ts`, `src/app/robots.ts` |
+| Mapa v kontaktu (OpenStreetMap bez cookies), souřadnice | `company.mapEmbedUrl`, `company.geo` v `src/config/site.ts` |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Logo a favicon
 
-## Deploy on Vercel
+Do složky **`public/`** patří tyto soubory (web je používá beze změn):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Soubor | Použití |
+|---|---|
+| `logo.svg`, `logo.png` | logo na světlém pozadí (header po odscrollování); PNG je v JSON-LD |
+| `logo-white.svg`, `logo-white.png` | logo na tmavém pozadí (hero, průhledný header, footer); PNG se vloží do OG obrázku |
+| `icon.svg`, `icon.png` | favicon a apple-touch-icon |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Rozměry loga (kvůli poměru stran, aby se stránka při načítání neposouvala) jsou v `siteConfig.logos` v `src/config/site.ts`. Pokud mají finální soubory jiný poměr stran než 252 : 64, upravte `width`/`height`.
+
+Poznámky k aktuálním souborům:
+
+- `logo.svg` a `icon.svg` jsou dodané soubory beze změny.
+- `logo-white.svg` je odvozený z `logo.svg`: text „macro“ je přebarvený na bílou, kostka a „soft“ zůstaly stejné.
+- PNG soubory jsou jen převod formátu z SVG.
+
+Jakmile budete mít oficiální varianty, soubory jednoduše přepište.
+
+## Loga partnerů
+
+1. Logo (ideálně SVG, případně PNG s průhledným pozadím) nahrajte do **`public/partners/`**, např. `public/partners/dhl.svg`.
+2. V `src/data/partners.ts` u daného partnera doplňte cestu (a případně odkaz):
+
+```ts
+{ name: "DHL", logo: "/partners/dhl.svg", url: "https://www.dhl.com" },
+```
+
+Partner bez vyplněného `logo` se zobrazí jako textový zástupný symbol se svým názvem. Partnera přidáte nebo odeberete úpravou pole `partners`.
+
+Loga mají velmi rozdílné proporce: Cargo Logistics je široké, DPD kompaktní. Při stejné výšce by proto působila nevyváženě. Každý partner má v `partners.ts` volitelnou `height` (výška v px, výchozí 36), kterou se loga opticky vyrovnají. Soubory v `public/partners/` mají oříznuté okraje. Pokud nahrajete logo s bílým okrajem kolem, bude v pásu menší.
+
+## React Bits komponenty
+
+Komponenty se instalují přes shadcn CLI z registry `@react-bits` (nastavené v `components.json`) a leží v `src/components/ui/`:
+
+| Komponenta | Použití |
+|---|---|
+| `SplitText` | animovaný nadpis v hero |
+| `ShapeGrid` | jemná animovaná mřížka na pozadí hero (načítá se až v nečinnosti prohlížeče) |
+| `SpotlightCard` | karty v sekci „Ponúkame“ |
+| `LogoLoop` | pás log partnerů (načítá se až při přiblížení sekce) |
+
+Další komponentu přidáte příkazem `npx shadcn@latest add @react-bits/<Název>-TS-TW`. shadcn MCP server pro vyhledávání komponent je nastavený v `.mcp.json`.
+
+Proti originálu z registry jsou v komponentách drobné úpravy: zápis do refu přesunutý z renderu do `useLayoutEffect` (pravidlo `react-hooks/refs`) a prop `id` u `SplitText`.
+
+## Animace a přístupnost
+
+- Lenis je napojený na GSAP ScrollTrigger podle README Lenisu (`lenis.on('scroll', ScrollTrigger.update)`, `gsap.ticker`, `lagSmoothing(0)`). Viz `src/components/providers/SmoothScroll.tsx`.
+- Při `prefers-reduced-motion: reduce` se Lenis nespustí a animace odhalení (`gsap.matchMedia()`) se vypnou. Obsah je pak hned viditelný.
+- Animuje se jen `transform` a `opacity`. Obsah hero je viditelný okamžitě, animuje se pouze nadpis.
+- Web má skip-link, sémantické sekce s `aria-labelledby`, viditelné focus stavy a po kliknutí na kotvu se fokus přesune na cílovou sekci.

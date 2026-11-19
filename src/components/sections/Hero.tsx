@@ -1,4 +1,3 @@
-import { ArrowRight } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
@@ -69,10 +68,6 @@ export function Hero() {
               className="group inline-flex items-center justify-center gap-2 rounded-full px-7 py-4 text-base font-semibold bg-brand-strong text-white transition-colors hover:bg-brand-hover"
             >
               {hero.cta.label}
-              <ArrowRight
-                aria-hidden="true"
-                className="size-5 transition-transform duration-300 group-hover:translate-x-1"
-              />
             </a>
             <a
               href={hero.secondaryCta.href}

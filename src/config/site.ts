@@ -216,6 +216,7 @@ export const siteConfig = {
     openMenu: "Otvoriť menu",
     closeMenu: "Zatvoriť menu",
     mainNav: "Hlavná navigácia",
+    mobileContact: "Rýchly kontakt",
     footerNav: "Odkazy v pätičke",
     home: "macro SOFT – na začiatok stránky",
   },

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { gsap, HEADER_OFFSET, MOTION_REDUCE, ScrollTrigger } from "@/lib/gsap";
+import { setLenis } from "@/lib/lenis";
 
 /**
  * Lenis smooth scroll prepojený s GSAP ScrollTrigger podľa README Lenisu.
@@ -24,6 +25,7 @@ export function SmoothScroll() {
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add(update);
       gsap.ticker.lagSmoothing(0);
+      setLenis(lenis);
     };
 
     const stop = () => {
@@ -32,6 +34,7 @@ export function SmoothScroll() {
       gsap.ticker.lagSmoothing(500, 33);
       lenis.destroy();
       lenis = null;
+      setLenis(null);
     };
 
     const onMotionChange = () => {

@@ -1,9 +1,12 @@
+"use client";
+
 import { locales, localeMeta, type Locale } from "@/i18n/config";
+import { setLocale } from "@/i18n/useLocale";
 import { cn } from "@/lib/utils";
 
 type LanguageSwitcherProps = {
   current: Locale;
-  /** Názov navigácie pre čítačky obrazovky („Jazyk“, „Language“…). */
+  /** Názov skupiny pre čítačky obrazovky („Jazyk“, „Language“…). */
   label: string;
   /** light = na bielej hlavičke, dark = na tmavom pozadí, menu = väčšie tlačidlá v mobilnom menu. */
   tone: "light" | "dark" | "menu";
@@ -11,14 +14,14 @@ type LanguageSwitcherProps = {
 };
 
 /**
- * Prepínač jazykov – obyčajné odkazy na /, /en/, /uk/ (funguje aj bez JavaScriptu).
+ * Prepínač jazykov – tlačidlá, ktoré preložia stránku na mieste (adresa sa nemení, poloha na stránke ostáva).
  * Viditeľná je skratka (SK, EN, UA), čítačky obrazovky počujú názov jazyka v danom jazyku.
  */
 export function LanguageSwitcher({ current, label, tone, className }: LanguageSwitcherProps) {
   const menu = tone === "menu";
 
   return (
-    <nav aria-label={label} className={className}>
+    <div role="group" aria-label={label} className={className}>
       <ul
         className={cn(
           "flex items-center",
@@ -32,15 +35,15 @@ export function LanguageSwitcher({ current, label, tone, className }: LanguageSw
           const active = locale === current;
           return (
             <li key={locale}>
-              <a
-                href={meta.path}
-                hrefLang={locale}
+              <button
+                type="button"
                 lang={locale}
-                aria-current={active ? "true" : undefined}
+                aria-pressed={active}
                 aria-label={meta.nativeName}
                 title={meta.nativeName}
+                onClick={() => setLocale(locale)}
                 className={cn(
-                  "inline-flex items-center justify-center font-semibold tracking-wide transition-colors",
+                  "inline-flex cursor-pointer items-center justify-center font-semibold tracking-wide transition-colors",
                   menu
                     ? "h-11 min-w-14 rounded-full px-4 text-sm ring-1"
                     : "h-8 min-w-10 rounded-full px-2.5 text-xs",
@@ -53,11 +56,11 @@ export function LanguageSwitcher({ current, label, tone, className }: LanguageSw
                 )}
               >
                 {meta.label}
-              </a>
+              </button>
             </li>
           );
         })}
       </ul>
-    </nav>
+    </div>
   );
 }

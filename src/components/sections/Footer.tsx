@@ -5,11 +5,10 @@ import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 
-export function Footer({ t, locale }: { t: Dictionary; locale: Locale }) {
+/** year sa doplní pri builde (statický export) – rovnaký na serveri aj v prehliadači. */
+export function Footer({ t, locale, year }: { t: Dictionary; locale: Locale; year: number }) {
   const { company } = siteConfig;
   const { footer, nav } = t;
-  // Rok sa doplní pri builde (statický export).
-  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-white/10 bg-ink-2 text-white/70">

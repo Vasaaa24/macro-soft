@@ -1,6 +1,6 @@
 # macro SOFT s.r.o. – web-vizitka
 
-Jednostránkový prezentační web firmy **macro SOFT s.r.o.** ([www.macro-soft.eu](https://www.macro-soft.eu)) ve slovenštině.
+Jednostránkový prezentační web firmy **macro SOFT s.r.o.** ([www.macro-soft.eu](https://www.macro-soft.eu)) ve slovenštině, angličtině a ukrajinštině (vše na jedné stránce).
 Nemá backend, formulář ani odesílání e-mailů. Kontakt je jen přes odkazy `tel:` a `mailto:`.
 
 **Stack:** Next.js 16 (App Router, statický export), React 19, TypeScript, Tailwind CSS 4, GSAP (ScrollTrigger, SplitText), Lenis, React Bits (přes shadcn CLI), lucide-react.
@@ -34,29 +34,23 @@ Výsledek je ve složce **`out/`**. Celý její obsah nahrajte na jakýkoli webh
 | Texty webu (pro každý jazyk zvlášť) | `src/i18n/dictionaries/sk.ts`, `en.ts`, `uk.ts` |
 | Firemní údaje, kontakty, IBAN, mapa, loga | `src/config/site.ts` |
 | Partneři / dopravci | `src/data/partners.ts` |
-| Barvy (paleta z loga), písmo | `src/app/globals.css` (`@theme`), `src/lib/fonts.ts` |
+| Barvy (paleta z loga), písmo | `src/app/globals.css` (`@theme`), `src/app/layout.tsx` |
 | Sekce stránky | `src/components/sections/*` |
-| SEO (metadata, hreflang), JSON-LD | `src/lib/metadata.ts`, `src/lib/jsonld.ts` |
-| Náhledový obrázek pro sdílení (OG) | `src/lib/og.tsx` (texty v `og` ve slovnících) |
+| SEO (metadata, OG), JSON-LD | `src/app/layout.tsx`, `src/lib/jsonld.ts` |
+| Náhledový obrázek pro sdílení (OG) | `src/lib/og.tsx` (texty v `og` ve slovníku) |
 | Sitemap / robots | `src/app/sitemap.ts`, `src/app/robots.ts` |
 | Mapa v kontaktu (OpenStreetMap bez cookies), souřadnice | `company.mapEmbedUrl`, `company.geo` v `src/config/site.ts` |
 
 ## Jazyky
 
-Web je ve třech jazycích:
+Web je **jedna stránka** ve třech jazycích: slovenština (výchozí), angličtina a ukrajinština. Jazyk se přepíná přímo na stránce, adresa zůstává stejná a nevznikají podstránky.
 
-| Jazyk | Adresa | Slovník |
-|---|---|---|
-| slovenština (výchozí) | `/` | `src/i18n/dictionaries/sk.ts` |
-| angličtina | `/en/` | `src/i18n/dictionaries/en.ts` |
-| ukrajinština | `/uk/` | `src/i18n/dictionaries/uk.ts` |
-
-- Jazyk se přepíná v hlavičce (na mobilu v menu) a v patičce. Přepínač ukazuje zkratky SK / EN / UA.
+- Přepínač SK / EN / UA je v hlavičce (na mobilu v menu) a v patičce. Po kliknutí se texty okamžitě přeloží a pozice na stránce zůstane.
+- Zvolený jazyk si prohlížeč pamatuje (`localStorage`). Při první návštěvě se jazyk vybere podle jazyka prohlížeče (sk/cs → SK, en → EN, uk → UA, jinak SK).
+- Vygenerované HTML je ve slovenštině, takže vyhledávače a náhledy odkazů (OG) vidí slovenskou verzi. Roboty se nepřepínají.
 - Všechny slovníky mají stejnou strukturu (typ `Dictionary` v `src/i18n/types.ts`). Pokud v některém jazyce chybí text, build skončí chybou.
-- Každý jazyk má vlastní `<html lang>`, titulek, popis, odkazy `hreflang`, záznam v `sitemap.xml` a vlastní OG obrázek (`/og.png`, `/en/og.png`, `/uk/og.png`).
-- Statický export neumí přesměrovat podle jazyka prohlížeče, proto se na `/` vždy zobrazí slovenština.
+- Logika přepínání je v `src/i18n/useLocale.ts` a `src/i18n/config.ts` (skript v `<head>`, který jazyk zjistí ještě před vykreslením).
 - Space Grotesk (písmo loga) nemá azbuku, proto jsou nadpisy v ukrajinštině v písmu Inter.
-- Nový jazyk: přidejte kód do `locales` v `src/i18n/config.ts` (a jeho údaje do `localeMeta`), vytvořte slovník a zaregistrujte ho v `src/i18n/index.ts`.
 
 ## Logo a favicon
 

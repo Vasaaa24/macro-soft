@@ -6,10 +6,6 @@ const nextConfig: NextConfig = {
   // Optimalizácia obrázkov vyžaduje server, pri exporte ju vypíname.
   images: { unoptimized: true },
   trailingSlash: true,
-  experimental: {
-    // Web má dva koreňové layouty (slovenčina na /, ostatné jazyky na /[lang]/) – 404 rieši app/global-not-found.tsx.
-    globalNotFound: true,
-  },
   turbopack: {
     // Koreň projektu (v nadradenom priečinku je iný package-lock.json).
     root: __dirname,

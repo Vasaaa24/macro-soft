@@ -31,6 +31,11 @@ html:lang(uk) {
   --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Kým sa stránka pri prvom načítaní neprepne do jazyka návštevníka, je skrytá (nepreblikne slovenčina). */
+html.i18n-pending body {
+  visibility: hidden;
+}
+
 /*
  * Karty – vyvýšenie tieňom namiesto výrazného okraja.
  * Obyčajné CSS premenné (nie @theme), aby boli vždy k dispozícii aj pre inline štýly (SpotlightCard).

@@ -7,9 +7,9 @@ import { uk } from "./dictionaries/uk";
 export * from "./config";
 export type { Dictionary } from "./types";
 
+/** Slovníky sú malé, preto sú všetky tri priamo v stránke – prepnutie jazyka je okamžité. */
 const dictionaries: Record<Locale, Dictionary> = { sk, en, uk };
 
-/** Texty webu pre daný jazyk. Slovníky sú malé, preto ich nenačítavame dynamicky. */
 export function getDictionary(locale: Locale): Dictionary {
   return dictionaries[locale];
 }

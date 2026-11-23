@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site";
-import { locales, localeMeta, type Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 
 /** JSON-LD schéma Organization (schema.org) so sídlom, IČO, DIČ a kontaktmi – v jazyku stránky. */
@@ -13,7 +13,7 @@ export function organizationJsonLd(t: Dictionary, locale: Locale) {
     name: company.legalName,
     legalName: company.legalName,
     alternateName: siteConfig.shortName,
-    url: `${siteConfig.url}${localeMeta[locale].path}`,
+    url: `${siteConfig.url}/`,
     logo: `${siteConfig.url}/logo.png`,
     image: `${siteConfig.url}/logo.png`,
     description: t.meta.description,

@@ -1,18 +1,20 @@
 import { ArrowUpRight, Building2, FileText, Landmark, Mail, MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import type { Dictionary } from "@/i18n/types";
 import { Container } from "@/components/ui/Container";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-export function Contact() {
-  const { contact, company } = siteConfig;
+export function Contact({ t }: { t: Dictionary }) {
+  const { contact } = t;
+  const { company } = siteConfig;
   const { labels } = contact;
   const { address } = company;
 
   return (
     <section
-      id={contact.id}
+      id={siteConfig.sections.contact}
       aria-labelledby="kontakt-title"
       className="relative isolate overflow-hidden bg-ink py-20 text-white sm:py-28 lg:py-32"
     >

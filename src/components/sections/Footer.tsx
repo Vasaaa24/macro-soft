@@ -1,9 +1,13 @@
 import { siteConfig } from "@/config/site";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 
-export function Footer() {
-  const { company, footer, nav } = siteConfig;
+export function Footer({ t, locale }: { t: Dictionary; locale: Locale }) {
+  const { company } = siteConfig;
+  const { footer, nav } = t;
   // Rok sa doplní pri builde (statický export).
   const year = new Date().getFullYear();
 
@@ -12,7 +16,7 @@ export function Footer() {
       <Container className="py-12 sm:py-16">
         <div className="grid gap-10 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)]">
           <div>
-            <Logo variant="light" className="h-12" />
+            <Logo variant="light" alt={t.a11y.logoAlt} className="h-12" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed">{footer.tagline}</p>
           </div>
 
@@ -24,9 +28,9 @@ export function Footer() {
               {company.address.postalCode} {company.address.city} – {company.address.district}
             </p>
             <p className="mt-2">
-              {siteConfig.contact.labels.ico}: {company.ico}
+              {t.contact.labels.ico}: {company.ico}
               <br />
-              {siteConfig.contact.labels.dic}: {company.dic}
+              {t.contact.labels.dic}: {company.dic}
             </p>
           </div>
 
@@ -41,7 +45,7 @@ export function Footer() {
                 {company.email}
               </a>
             </p>
-            <nav aria-label={siteConfig.a11y.footerNav} className="mt-5">
+            <nav aria-label={t.a11y.footerNav} className="mt-5">
               <ul className="flex flex-wrap gap-x-5 gap-y-2">
                 {nav.map((item) => (
                   <li key={item.href}>
@@ -59,7 +63,10 @@ export function Footer() {
           <p>
             © {year} {company.legalName} {footer.rights}
           </p>
-          <p>{siteConfig.domain}</p>
+          <div className="flex items-center gap-5">
+            <LanguageSwitcher current={locale} label={t.a11y.language} tone="dark" />
+            <p>{siteConfig.domain}</p>
+          </div>
         </div>
       </Container>
     </footer>

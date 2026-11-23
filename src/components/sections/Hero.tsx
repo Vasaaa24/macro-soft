@@ -1,11 +1,11 @@
-import { siteConfig } from "@/config/site";
+import type { Dictionary } from "@/i18n/types";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import SplitText from "@/components/ui/SplitText";
 import { HeroBackground } from "./HeroBackground";
 
-export function Hero() {
-  const { hero } = siteConfig;
+export function Hero({ t }: { t: Dictionary }) {
+  const { hero } = t;
 
   return (
     <section aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-ink text-white">

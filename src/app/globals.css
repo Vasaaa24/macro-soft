@@ -26,6 +26,11 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Space Grotesk nemá azbuku – v ukrajinčine sú nadpisy v Interi (inak by azbuku vykreslil náhradný Arial). */
+html:lang(uk) {
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
 /*
  * Karty – vyvýšenie tieňom namiesto výrazného okraja.
  * Obyčajné CSS premenné (nie @theme), aby boli vždy k dispozícii aj pre inline štýly (SpotlightCard).

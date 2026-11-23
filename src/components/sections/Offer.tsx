@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { siteConfig } from "@/config/site";
+import type { Dictionary } from "@/i18n/types";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
@@ -13,11 +14,11 @@ const cardStyle = { "--spotlight-card-border": "var(--card-border)" } as CSSProp
 // Rozloženie „bento“: prvé dve karty širšie, ďalšie tri v rade (na desktope).
 const spans = ["lg:col-span-3", "lg:col-span-3", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2"];
 
-export function Offer() {
-  const { offer } = siteConfig;
+export function Offer({ t }: { t: Dictionary }) {
+  const { offer } = t;
 
   return (
-    <section id={offer.id} aria-labelledby="ponukame-title" className="on-light bg-paper py-20 sm:py-28 lg:py-32">
+    <section id={siteConfig.sections.offer} aria-labelledby="ponukame-title" className="on-light bg-paper py-20 sm:py-28 lg:py-32">
       <Container>
         <Reveal>
           <SectionHeading id="ponukame-title" eyebrow={offer.eyebrow} title={offer.title} intro={offer.intro} />

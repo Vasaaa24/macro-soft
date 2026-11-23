@@ -4,7 +4,10 @@ import { useCallback, useEffect, useId, useRef, useState, type CSSProperties } f
 import { Mail, Phone } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { Logo } from "@/components/ui/Logo";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
 import { lockScroll } from "@/lib/lenis";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +18,15 @@ const stagger = (open: boolean, index: number): CSSProperties => ({
   transitionDelay: open ? `${140 + index * 60}ms` : "0ms",
 });
 
-export function Header() {
+type HeaderProps = {
+  locale: Locale;
+  /** Iba texty, ktoré hlavička potrebuje – menej dát v klientskom JS. */
+  nav: Dictionary["nav"];
+  cta: Dictionary["hero"]["cta"];
+  a11y: Dictionary["a11y"];
+};
+
+export function Header({ locale, nav, cta, a11y }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const menuId = useId();
@@ -75,7 +86,7 @@ export function Header() {
       }
     };
 
-    const desktop = window.matchMedia("(min-width: 768px)");
+    const desktop = window.matchMedia("(min-width: 1024px)");
     const onBreakpoint = () => {
       if (desktop.matches) close();
     };
@@ -109,18 +120,20 @@ export function Header() {
           <a
             href="#"
             onClick={open ? close : undefined}
-            aria-label={siteConfig.a11y.home}
+            aria-label={a11y.home}
             className="relative block shrink-0 rounded-md"
           >
             {/* Biele logo na tmavom pozadí (hero, menu), tmavé na bielej hlavičke – plynulá výmena cez opacity. */}
             <Logo
               variant="light"
+              alt={a11y.logoAlt}
               priority
               className={cn("h-10 md:h-12", "transition-opacity duration-300", lightLogo ? "opacity-100" : "opacity-0")}
             />
             <span aria-hidden="true" className="absolute inset-0">
               <Logo
                 variant="dark"
+                alt=""
                 className={cn(
                   "h-10 md:h-12",
                   "transition-opacity duration-300",
@@ -130,14 +143,14 @@ export function Header() {
             </span>
           </a>
 
-          <nav aria-label={siteConfig.a11y.mainNav} className="hidden md:block">
+          <nav aria-label={a11y.mainNav} className="hidden lg:block">
             <ul className="flex items-center gap-1">
-              {siteConfig.nav.map((item) => (
+              {nav.map((item) => (
                 <li key={item.href}>
                   <a
                     href={item.href}
                     className={cn(
-                      "rounded-md px-3 py-2 text-[0.95rem] font-medium transition-colors",
+                      "rounded-md px-2.5 py-2 text-[0.95rem] font-medium transition-colors xl:px-3",
                       tone === "solid" ? "text-graphite hover:text-ink" : "text-white/80 hover:text-white",
                     )}
                   >
@@ -148,12 +161,18 @@ export function Header() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher
+              current={locale}
+              label={a11y.language}
+              tone={tone === "solid" ? "light" : "dark"}
+              className="hidden lg:block"
+            />
             <a
-              href={siteConfig.hero.cta.href}
-              className="hidden items-center rounded-full bg-brand-strong px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover md:inline-flex"
+              href={cta.href}
+              className="hidden items-center rounded-full bg-brand-strong px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-hover xl:inline-flex"
             >
-              {siteConfig.hero.cta.label}
+              {cta.label}
             </a>
 
             {/* Hamburger, ktorý sa animovane zmení na krížik */}
@@ -161,12 +180,12 @@ export function Header() {
               ref={toggleRef}
               type="button"
               className={cn(
-                "relative inline-flex size-11 items-center justify-center rounded-full transition-colors md:hidden",
+                "relative inline-flex size-11 items-center justify-center rounded-full transition-colors lg:hidden",
                 tone === "solid" ? "text-ink hover:bg-surface" : "text-white hover:bg-white/10",
               )}
               aria-expanded={open}
               aria-controls={menuId}
-              aria-label={open ? siteConfig.a11y.closeMenu : siteConfig.a11y.openMenu}
+              aria-label={open ? a11y.closeMenu : a11y.openMenu}
               onClick={() => setMenu(!open)}
             >
               <span aria-hidden="true" className="relative block h-3.5 w-6">
@@ -198,7 +217,7 @@ export function Header() {
         inert={!open}
         data-lenis-prevent
         className={cn(
-          "fixed inset-0 z-40 flex flex-col overflow-y-auto bg-ink pt-16 transition-[opacity,transform,visibility] duration-500 ease-out-expo md:hidden",
+          "fixed inset-0 z-40 flex flex-col overflow-y-auto bg-ink pt-16 transition-[opacity,transform,visibility] duration-500 ease-out-expo lg:hidden",
           open ? "visible translate-y-0 opacity-100" : "invisible -translate-y-3 opacity-0",
         )}
       >
@@ -207,10 +226,10 @@ export function Header() {
           className="pointer-events-none absolute -bottom-40 -right-32 size-[28rem] rounded-full bg-[radial-gradient(closest-side,rgba(47,128,237,0.28),transparent)]"
         />
 
-        <nav aria-label={siteConfig.a11y.mainNav} className="relative flex-1">
+        <nav aria-label={a11y.mainNav} className="relative flex-1">
           <Container className="pt-6">
             <ul className="border-t border-white/10">
-              {siteConfig.nav.map((item, index) => (
+              {nav.map((item, index) => (
                 <li
                   key={item.href}
                   style={stagger(open, index)}
@@ -239,17 +258,18 @@ export function Header() {
             open ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
           )}
         >
-          <div style={stagger(open, siteConfig.nav.length)}>
+          <div style={stagger(open, nav.length)}>
+            <LanguageSwitcher current={locale} label={a11y.language} tone="menu" className="mb-6" />
             <a
-              href={siteConfig.hero.cta.href}
+              href={cta.href}
               onClick={close}
               className="flex items-center justify-center rounded-full bg-brand-strong px-5 py-4 text-base font-semibold text-white transition-colors hover:bg-brand-hover"
             >
-              {siteConfig.hero.cta.label}
+              {cta.label}
             </a>
 
             <p className="mt-8 text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
-              {siteConfig.a11y.mobileContact}
+              {a11y.mobileContact}
             </p>
             <ul className="mt-3 grid gap-2 text-white/80">
               <li>

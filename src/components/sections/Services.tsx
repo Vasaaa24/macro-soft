@@ -1,15 +1,16 @@
 import { siteConfig } from "@/config/site";
+import type { Dictionary } from "@/i18n/types";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-export function Services() {
-  const { services } = siteConfig;
+export function Services({ t }: { t: Dictionary }) {
+  const { services } = t;
 
   return (
     <section
-      id={services.id}
+      id={siteConfig.sections.services}
       aria-labelledby="zaistime-title"
       className="on-light border-y border-line bg-surface py-20 sm:py-28 lg:py-32"
     >

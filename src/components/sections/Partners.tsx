@@ -1,14 +1,15 @@
 import { siteConfig } from "@/config/site";
+import type { Dictionary } from "@/i18n/types";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PartnersLoop } from "./PartnersLoop";
 
-export function Partners() {
-  const { partners } = siteConfig;
+export function Partners({ t }: { t: Dictionary }) {
+  const { partners } = t;
 
   return (
-    <section id={partners.id} aria-labelledby="partneri-title" className="on-light bg-paper py-20 sm:py-28">
+    <section id={siteConfig.sections.partners} aria-labelledby="partneri-title" className="on-light bg-paper py-20 sm:py-28">
       <Reveal>
         <Container>
           <SectionHeading
